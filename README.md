@@ -14,12 +14,12 @@ Ce projet est une application en ligne de commande (CLI) qui simule un rice-cook
 
 Le projet est développé en C++
 
+
 ### Installation
 
-Sur linux:
+Sur archlinux
 
-```bash
-pacman -S php
+sudo pacman -S gcc
 
 ### Coding Standard
 
@@ -28,3 +28,9 @@ pacman -S php
 ### Linter
 
 Le code est vérifié par clangd
+
+### Execution
+
+g++ -o RiceCooker RiceCooker.cpp
+
+./RiceCooker
