@@ -14,6 +14,11 @@ Ce projet est une application en ligne de commande (CLI) qui simule un rice-cook
 
 Le projet est développé en Kotlin
 
+### Installation
+
+Sur archlinux 
+
+sudo pacman -S kotlin
 
 ### Coding Standard
 
@@ -22,3 +27,9 @@ Kotlin coding conventions.
 ### Linter
 
 Le code est vérifié par Ktlint
+
+### Execution
+
+kotlinc RiceCookerSimulation.kt -include-runtime -d main.jar
+
+java -jar main.jar
