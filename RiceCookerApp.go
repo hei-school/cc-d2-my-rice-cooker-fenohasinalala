@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"os"
 	"strconv"
-	"strings"
 )
 
 // Ingredient représente un ingrédient avec son nom, unité et quantité.
@@ -29,7 +28,7 @@ type Validator func(string) (float64, error)
 func ValidateNumber(input string) (float64, error) {
 	value, err := strconv.ParseFloat(input, 64)
 	if err != nil || value < 0 {
-		return 0, fmt.Errorf("Veuillez entrer un nombre positif")
+		return 0, fmt.Errorf("veuillez entrer un nombre positif")
 	}
 	return value, nil
 }
