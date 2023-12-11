@@ -16,7 +16,9 @@ Le projet est développé en [Go](https://golang.org/). Assurez-vous d'avoir Go 
 
 ### Installation
 
-Aucune installation spécifique n'est requise pour le projet. Cependant, vous devez vous assurer que Go est correctement configuré sur votre système.
+Sur archlinux
+
+sudo pacman -S go
 
 ### Coding Standard
 
@@ -28,3 +30,7 @@ Le code est vérifié par [golangci-lint](https://golangci-lint.run/) pour garan
 
 ```bash
 go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+
+
+### Execution
+go run ./RiceCookerApp.go
