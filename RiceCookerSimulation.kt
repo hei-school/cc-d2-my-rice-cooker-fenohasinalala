@@ -5,7 +5,7 @@ fun main() {
 
     while (true) {
         println("Choisir votre action:")
-        println("1-> recette existante")
+        println("1-> Recette existante")
         println("2-> Manuelle")
         println("3-> Quitter")
 
@@ -24,9 +24,9 @@ fun main() {
 class RiceCooker {
     fun preparerRecetteExistante() {
         println("Choisir votre recette existante:")
-        println("1-> riz")
-        println("2-> oeuf")
-        println("3-> annuler")
+        println("1-> Riz")
+        println("2-> Oeuf")
+        println("3-> Annuler")
 
         when (readLine()?.toIntOrNull()) {
             1 -> ajouterIngredients("riz")
