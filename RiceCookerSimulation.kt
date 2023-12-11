@@ -1,130 +1,146 @@
 import kotlin.system.exitProcess
 
-fun main() {
-    val riceCooker = RiceCooker()
+// Définition de la classe Recette
+data class Recette(val nom: String, val temperature: Int, val duree: Int)
 
-    while (true) {
-        println("Choisir votre action:")
-        println("1-> Recette existante")
-        println("2-> Manuelle")
-        println("3-> Quitter")
+// Définition de la classe Ingredient
+data class Ingredient(val nom: String, val unite: String, val quantite: Int)
 
-        when (readLine()?.toIntOrNull()) {
-            1 -> riceCooker.preparerRecetteExistante()
-            2 -> riceCooker.preparerManuelle()
-            3 -> {
-                println("Merci d'avoir utilisé le simulateur de rice-cooker. Au revoir!")
-                exitProcess(0)
+// Classe principale de l'application
+class RiceCookerApp {
+    private var temperatureAuto = 0
+    private var dureeAuto = 0
+    private var ingredients: MutableList<Ingredient> = mutableListOf()
+
+    fun start() {
+        while (true) {
+            println("Choisissez votre action:")
+            println("1-> Recette existante")
+            println("2-> Manuelle")
+            println("3-> Quitter")
+
+            when (readLine()?.toIntOrNull()) {
+                1 -> recetteExistante()
+                2 -> manuelle()
+                3 -> exitProcess(0)
+                else -> println("Choix invalide, veuillez réessayer.")
             }
-            else -> println("Choix invalide. Veuillez entrer 1, 2, ou 3.")
         }
     }
-}
 
-class RiceCooker {
-    fun preparerRecetteExistante() {
-        println("Choisir votre recette existante:")
+    private fun recetteExistante() {
+        println("Choisissez votre recette:")
         println("1-> Riz")
         println("2-> Oeuf")
         println("3-> Annuler")
 
         when (readLine()?.toIntOrNull()) {
-            1 -> ajouterIngredients("riz")
-            2 -> ajouterIngredients("oeuf")
+            1 -> preparerRecette(Recette("Riz", temperatureAuto, dureeAuto))
+            2 -> preparerRecette(Recette("Oeuf", temperatureAuto, dureeAuto))
             3 -> return
-            else -> println("Choix invalide. Veuillez entrer 1, 2, ou 3.")
+            else -> println("Choix invalide, veuillez réessayer.")
         }
     }
 
-    fun preparerManuelle() {
-        var temperature: Int
-        var duree: Int
-
-        println("Définir température en degrés:")
-        temperature = readInt()
+    private fun manuelle() {
+        println("Définir la température en degrés:")
+        val temperature = demanderNombrePositif()
 
         println("Définir la durée de traitement en minutes:")
-        duree = readInt()
+        val duree = demanderNombrePositif()
 
-        ajouterIngredients("manuel", temperature, duree)
+        preparerRecette(Recette("Manuelle", temperature, duree))
     }
 
-    private fun ajouterIngredients(type: String, temperature: Int = 0, duree: Int = 0) {
-        val ingredients = mutableListOf<Ingredient>()
+    private fun preparerRecette(recette: Recette) {
+        temperatureAuto = recette.temperature
+        dureeAuto = recette.duree
+        ingredients.clear()
 
-        println("Commencer l'ajout d'ingrédients:")
+        ajoutIngredient()
+    }
+
+    private fun ajoutIngredient() {
+        val ajoutIngredientMenu = """
+            Choisissez votre action:
+            1-> Ouvrir le rice-cooker et ajouter des ingrédients
+            2-> Annuler
+        """.trimIndent()
+
+        println(ajoutIngredientMenu)
+
+        when (readLine()?.toIntOrNull()) {
+            1 -> ajoutIngredientManuel()
+            2 -> return
+            else -> println("Choix invalide, veuillez réessayer.")
+        }
+    }
+
+    private fun ajoutIngredientManuel() {
         while (true) {
-            println("1-> Ouvrir le rice-cooker et ajouter des ingrédients")
-            println("2-> Annuler")
+            val ingredient = Ingredient(
+                demanderString("Nom de l'ingrédient:"),
+                demanderString("Unité de mesure:"),
+                demanderNombrePositif()
+            )
+
+            ingredients.add(ingredient)
+
+            println("""
+                Choisissez votre action:
+                1-> Ajouter un autre ingrédient
+                2-> Fermer le rice-cooker et démarrer la préparation
+                3-> Annuler
+            """.trimIndent())
 
             when (readLine()?.toIntOrNull()) {
-                1 -> {
-                    val nom = readString("Nom de l'ingrédient:")
-                    val unite = readString("Définir l'unité:")
-                    val quantite = readInt("Définir la quantité:")
-
-                    ingredients.add(Ingredient(nom, unite, quantite))
-
-                    println("1-> Ajouter un autre ingrédient")
-                    println("2-> Fermer le rice-cooker et démarrer la préparation")
-                    println("3-> Annuler")
-
-                    when (readLine()?.toIntOrNull()) {
-                        1 -> continue
-                        2 -> {
-                            afficherResultat(type, temperature, duree, ingredients)
-                            return
-                        }
-                        3 -> {
-                            println("Opération annulée. Retour au menu principal.")
-                            return
-                        }
-                        else -> println("Choix invalide. Veuillez entrer 1, 2, ou 3.")
-                    }
-                }
+                1 -> continue
                 2 -> {
-                    println("Opération annulée. Retour au menu principal.")
+                    afficherResultat()
                     return
                 }
-                else -> println("Choix invalide. Veuillez entrer 1 ou 2.")
+                3 -> {
+                    annulerPreparation()
+                    return
+                }
+                else -> println("Choix invalide, veuillez réessayer.")
             }
         }
     }
 
-    private fun afficherResultat(type: String, temperature: Int, duree: Int, ingredients: List<Ingredient>) {
+    private fun afficherResultat() {
         println("Le plat est prêt!")
-        println("Type: $type")
-        println("Température: $temperature degrés")
-        println("Durée: $duree minutes")
-        println("Ingrédients:")
+        println("Ingrédients utilisés:")
         ingredients.forEach { println("${it.nom}: ${it.quantite} ${it.unite}") }
-
-        // Réinitialiser les opérations
-        println("Retour au menu principal. Toutes les opérations annulées.")
+        println("Température: $temperatureAuto °C")
+        println("Durée: $dureeAuto minutes")
+        annulerPreparation()
     }
 
-    private fun readString(prompt: String): String {
-        while (true) {
-            print("$prompt ")
-            val input = readLine()
-            if (!input.isNullOrBlank()) {
-                return input
-            }
-            println("Veuillez entrer une valeur non vide.")
-        }
+    private fun annulerPreparation() {
+        temperatureAuto = 0
+        dureeAuto = 0
+        ingredients.clear()
+        println("Annulation de la préparation. Retour au menu principal.")
     }
 
-    private fun readInt(prompt: String): Int {
-        while (true) {
-            print("$prompt ")
-            val input = readLine()
-            val value = input?.toIntOrNull()
-            if (value != null && value >= 0) {
-                return value
-            }
-            println("Veuillez entrer un nombre entier positif.")
-        }
+    private fun demanderNombrePositif(): Int {
+        var nombre: Int
+        do {
+            print("Veuillez entrer un nombre positif: ")
+            nombre = readLine()?.toIntOrNull() ?: -1
+        } while (nombre < 0)
+
+        return nombre
+    }
+
+    private fun demanderString(message: String): String {
+        print("$message ")
+        return readLine() ?: ""
     }
 }
 
-data class Ingredient(val nom: String, val unite: String, val quantite: Int)
+fun main() {
+    val riceCookerApp = RiceCookerApp()
+    riceCookerApp.start()
+}
