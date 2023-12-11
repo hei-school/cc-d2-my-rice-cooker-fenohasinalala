@@ -1,7 +1,7 @@
 #include <iostream>
 #include <limits>
-#include <vector>
 #include <string>
+#include <vector>
 
 class Ingredient {
 public:
@@ -22,19 +22,19 @@ private:
 public:
     RiceCooker() : temperature(0.0), duration(0) {}
 
-    void setTemperature(double temp) {
+    void SetTemperature(double temp) {
         temperature = temp;
     }
 
-    void setDuration(int dur) {
+    void SetDuration(int dur) {
         duration = dur;
     }
 
-    void addIngredient(const std::string& name, const std::string& unit, double quantity) {
+    void AddIngredient(const std::string& name, const std::string& unit, double quantity) {
         ingredients.emplace_back(name, unit, quantity);
     }
 
-    void displayResult() {
+    void DisplayResult() const {
         std::cout << "Le plat est prêt !\n";
         std::cout << "Ingrédients utilisés :\n";
         for (const auto& ingredient : ingredients) {
@@ -44,7 +44,7 @@ public:
         std::cout << "Durée : " << duration << " minutes\n";
     }
 
-    void reset() {
+    void Reset() {
         temperature = 0.0;
         duration = 0;
         ingredients.clear();
@@ -53,7 +53,7 @@ public:
 
 class Validator {
 public:
-    static double getValidDouble() {
+    static double GetValidDouble() {
         double value;
         while (true) {
             std::cin >> value;
@@ -68,7 +68,7 @@ public:
         return value;
     }
 
-    static int getValidInt() {
+    static int GetValidInt() {
         int value;
         while (true) {
             std::cin >> value;
@@ -93,7 +93,7 @@ int main() {
         std::cout << "1-> Recette existante\n";
         std::cout << "2-> Manuelle\n";
         std::cout << "3-> Annuler\n";
-        choice = Validator::getValidInt();
+        choice = Validator::GetValidInt();
 
         switch (choice) {
             case 1: {
@@ -101,27 +101,27 @@ int main() {
                 std::cout << "1-> Riz\n";
                 std::cout << "2-> Oeuf\n";
                 std::cout << "3-> Annuler\n";
-                int recipeChoice = Validator::getValidInt();
+                int recipeChoice = Validator::GetValidInt();
 
                 if (recipeChoice == 1) {
                     // Riz
-                    riceCooker.setTemperature(100.0);
-                    riceCooker.setDuration(20);
+                    riceCooker.SetTemperature(100.0);
+                    riceCooker.SetDuration(20);
                 } else if (recipeChoice == 2) {
                     // Oeuf
-                    riceCooker.setTemperature(70.0);
-                    riceCooker.setDuration(10);
+                    riceCooker.SetTemperature(70.0);
+                    riceCooker.SetDuration(10);
                 }
                 break;
             }
             case 2: {
                 std::cout << "Définir température en degrés : ";
-                double temp = Validator::getValidDouble();
-                riceCooker.setTemperature(temp);
+                double temp = Validator::GetValidDouble();
+                riceCooker.SetTemperature(temp);
 
                 std::cout << "Définir la durée de traitement en minutes : ";
-                int dur = Validator::getValidInt();
-                riceCooker.setDuration(dur);
+                int dur = Validator::GetValidInt();
+                riceCooker.SetDuration(dur);
                 break;
             }
             case 3:
@@ -137,7 +137,7 @@ int main() {
             std::cout << "Choisir si accepte de commencer l'ajout d'ingrédient:\n";
             std::cout << "1-> Ouvrir le rice-cooker et ajouter des ingrédients\n";
             std::cout << "2-> Annuler\n";
-            addIngredientChoice = Validator::getValidInt();
+            addIngredientChoice = Validator::GetValidInt();
 
             do {
                 if (addIngredientChoice == 1) {
@@ -152,21 +152,21 @@ int main() {
                     std::cin >> unit;
 
                     std::cout << "Définir la quantité : ";
-                    quantity = Validator::getValidDouble();
+                    quantity = Validator::GetValidDouble();
 
-                    riceCooker.addIngredient(name, unit, quantity);
+                    riceCooker.AddIngredient(name, unit, quantity);
 
                     std::cout << "Choisir si accepte de continuer l'ajout d'ingrédient:\n";
                     std::cout << "1-> Ajouter un autre ingrédient\n";
                     std::cout << "2-> Fermer le rice-cooker et démarrer la préparation\n";
                     std::cout << "3-> Annuler\n";
-                    addIngredientChoice = Validator::getValidInt();
+                    addIngredientChoice = Validator::GetValidInt();
                 }
             } while (addIngredientChoice == 1);
 
             if (addIngredientChoice == 2) {
-                riceCooker.displayResult();
-                riceCooker.reset();
+                riceCooker.DisplayResult();
+                riceCooker.Reset();
             }
         }
     } while (choice != 3);
