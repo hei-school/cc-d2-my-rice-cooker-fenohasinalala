@@ -28,3 +28,6 @@ pacman -S php
 ### Linter
 
 Le code est vérifié par PHP_CodeSniffer
+
+### Execution
+php RiceCookerApp.php
